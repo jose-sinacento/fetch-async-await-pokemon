@@ -1,55 +1,73 @@
-const showPokemons = document.getElementById('app');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
-const searchBtn = document.getElementById('searchBtn');
-const searchInput = document.getElementById('searchInput');
+const resetBtn = document.getElementById('resetBtn');
+const divApp = document.getElementById('app');
+let page = 0
 
-// aqui me traigo el catalogo de pokemons
-
-
-
-const getPokemons = async () => {
-    try {
-    
-        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/`);
-
-        if (!res.ok) {
-            throw new Error ("La lista de Pokemon no se pudo cargar");
-        }
-        const pokemons = await res.json();
-        console.log(pokemons);
-    
-        // const pokemonName = pokemons.results.name;
-        
-        
-        printPokemons(pokemons);
-        
-    } catch (error) {
-        console.log(error);
+// Buscar pokemons 
+searchBtn.addEventListener('click', () => {
+    const pokemonNombre = searchBtn.value;
+    if (searchInput) {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNombre}`)
     }
+    console.log(pokemonNombre)  
+})
+
+// Botón para resetear 
+resetBtn.addEventListener('click', () => {
+divApp.innerHTML = " ";
+}); 
+
+//botón para avanzar
+document.getElementById ('nextBtn').addEventListener('click', () => {
+    traerPokemons();
+    if (page > 0) {
+    }
+    page ++ 
+});
+
+//botón para retroceder 
+document.getElementById ('prevBtn').addEventListener('click', () => {
+    if (page > 0) {
+        page --  
+        traerPokemons();
+    } else {
+        page = 0;
+    }
+});
+
+
+//función para conseguir los pokemons 
+const traerPokemons = async () => {
+    try {
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon/')
+        if (!response.ok) {
+            throw new Error(' Pokemon no encontrado')
+        }
+        const data = await response.json(); 
+        console.log(data.results);
+        pintarPokemons(data);
+
+ }  catch (error) {
+    console.error(error)
+        }
+    };
     
+    traerPokemons();
 
-};
+//botón para pintar los Pokemons 
+const pintarPokemons = (data) => {
+    const dataResults = data.results;
+    dataResults.forEach(element => {
 
-getPokemons();
-
-
-const printPokemons = (pokemons) => {
-    const pintarPokemons = pokemons.results;
-    pintarPokemons.forEach(elementPok => {
-        const pokemonName = elementPok.name;
-        // const pokeImagen = elementPok.sprites.back_default;
-         
-        showPokemons.innerHTML += `<li>
-        <p>Nombre: ${pokemonName}</P>
+        PokemonNombre = element.name;
+        divApp.innerHTML += `<li>
+           <p>Nombre: ${PokemonNombre}
+           </p>
         </li>`
+        
     });
 };
-
-
-searchBtn.addEventListener('click', () => {
-    const findPokemon = searchInput.value;
-    (`https://pokeapi.co/api/v2/pokemon/${findPokemon}`)
-
-});
 
