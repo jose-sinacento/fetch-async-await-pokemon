@@ -21,7 +21,7 @@ header {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 100px;
 
   padding: 20px;
 }
@@ -69,4 +69,9 @@ header {
 
 li {
   list-style: none;
+ 
+}
+
+img {
+  width: 150px;
 }
