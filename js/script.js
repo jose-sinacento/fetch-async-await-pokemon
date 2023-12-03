@@ -4,9 +4,10 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const resetBtn = document.getElementById('resetBtn');
 const divApp = document.getElementById('app');
-let page = 0
+// let limitShow = 10;
+let numPok = 10;
 
-// Buscar pokemons 
+// // Buscar pokemons 
 // searchBtn.addEventListener('click', () => {
 //     const pokemonNombre = searchInput.value;
 //     console.log(pokemonNombre);
@@ -21,17 +22,17 @@ let page = 0
 //             })
 //         };
 
-        // Botón para resetear 
+        // Botón para resetear CHECK 
         resetBtn.addEventListener('click', () => {
-            divApp.innerHTML = " ";
+            location.reload();
         });
 
         //botón para avanzar
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            traerPokemons();
-            if (page > 0) {
+        document.getElementById('nextBtn').addEventListener('click', () => {   
+            if (numPok > 0) {
+                numPok = numPok + 10;
             }
-            page++
+            traerPokemons();
         });
 
         //botón para retroceder 
@@ -44,14 +45,16 @@ let page = 0
             }
         });
 
-        //función para conseguir los pokemons 
+        //función para conseguir los pokemons CHECK
         const traerPokemons = async () => {
             try {
-                const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10&offset=0')
+               
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${numPok}&offset=0`)
                 if (!response.ok) {
                     throw new Error(' Pokemon no encontrado')
                 }
                 const data = await response.json();
+                console.log(data);
                 console.log(data.results);
                 pintarPokemons(data);
 
