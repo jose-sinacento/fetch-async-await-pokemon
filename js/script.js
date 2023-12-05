@@ -5,7 +5,7 @@ const nextBtn = document.getElementById('nextBtn');
 const resetBtn = document.getElementById('resetBtn');
 const divApp = document.getElementById('app');
 // let limitShow = 10;
-let numPok = 10;
+let numPagina = 0;
 
 // // Buscar pokemons 
 // searchBtn.addEventListener('click', () => {
@@ -29,27 +29,26 @@ let numPok = 10;
 
         //botón para avanzar
         document.getElementById('nextBtn').addEventListener('click', () => {   
-            if (numPok > 0) {
-                numPok = numPok + 10;
+            if (numPagina >= 0) {
+                numPagina += 10;
             }
-            traerPokemons();
+
+            traerPokemons(numPagina);
         });
 
         //botón para retroceder 
         document.getElementById('prevBtn').addEventListener('click', () => {
-            if (page > 0) {
-                page--
-                traerPokemons();
-            } else {
-                page = 0;
+            if (numPagina > 0) {
+                numPagina -= 10;
             }
+
+            traerPokemons(numPagina);
         });
 
         //función para conseguir los pokemons CHECK
-        const traerPokemons = async () => {
+        const traerPokemons = async (numPagina) => {
             try {
-               
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${numPok}&offset=0`)
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${numPagina}`)
                 if (!response.ok) {
                     throw new Error(' Pokemon no encontrado')
                 }
@@ -63,12 +62,14 @@ let numPok = 10;
             }
         };
 
-        traerPokemons();
+        traerPokemons(numPagina);
 
         //funcion para pintar los Pokemons 
         const pintarPokemons = (data) => {
             const dataResults = data.results;
             // StoragePokemon = [];
+            
+            divApp.innerHTML = "<ul>";
             dataResults.forEach(async (element) => {
                 // StoragePokemon.push(element.url);
 
@@ -87,4 +88,5 @@ let numPok = 10;
                 <img src="${pokemonImg}" alt="${PokemonNombre}"> 
                 </li>`
             });
+            divApp.innerHTML += "</ul>";
         };
